@@ -3,19 +3,32 @@
 
 (defstyles screen
   [:body {:color "black"}]
-  [:section {:margin-top "40px"}]
 
-  [:li.species-item.selected {:color "red"}]
+  [:.edit-species
+   [:.datum-input
+    [:label {:width "140px" :display "inline-flex"}]]
 
-  [:.container {:display "flex"}]
+   [:details {:margin-left "10px"}]
 
-  [:#species-container [:.title {:display "block" :font-size "200%"}]]
+   [:.part-types
+    {:width "650px"
+     :display "flex"
+     :flex-wrap "wrap"}
 
-  [:.taxonomy :.clade {:width "315px"}]
-  [:.taxonomy :.clade-type {:display "inline-block" :width "100px"}]
+    [:.type-select
+     [:label {:width "100px" :height "100px" :display "inline-block"}
+      [:img {:width "100%" :height "100%" :object-fit "scale-down"}]]
 
-  [".symptoms .add-symptom" {:display "none"}]
-  [".symptoms[open] .add-symptom" {:display "inline"}]
+     ["label .tooltiptext"
+      {:display "none"
+       :position "absolute"
+       :z-index 1
+       :padding "10px"
+       :background-color "black"
+       :color "white"}]
+     ["label:hover .tooltiptext" {:display "inherit"}]
 
-  [:details {:margin-left "15px"}]
+     [:input {:display "none"}]
+     ["input[type=checkbox] + label img" {:border "5px solid white"}]
+     ["input[type=checkbox]:checked + label img" {:border "5px solid red"}]]]]
 )

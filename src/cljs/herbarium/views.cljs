@@ -5,139 +5,73 @@
    [herbarium.translations :refer [translate]]
    ))
 
-(def taxonomy-types [:kingdom :class :order :family :genus :species])
-(def plant-parts [:whole-plant :leaves :stem :bark :root])
-(def application-methods [:raw :cooked :dried :infusion :poultice :oil])
-
 (defn tr
   "Translate the given phrase to the current language."
   ([phrase] (tr phrase @(re-frame/subscribe [::subs/lang])))
   ([phrase lang] (translate lang phrase)))
 
-(defn dispatch-key
-  ([key] (fn [event] (re-frame/dispatch [key (-> event .-target .-value)])))
-  ([key val] (fn [_] (re-frame/dispatch [key val]))))
+(defn text-input
+  ([name] (text-input name (tr name)))
+  ([name label]
+   [:div {:class "datum-input"}
+    [:label {:for name} label]
+    [:input {:name name :id name :type "text"}]]))
 
-(defn stop-propagation [f]
-  (fn [e] (.preventDefault e) (f e)))
+(defn part-type-selector [base-path part type]
+  (let [name (subs type 0 (- (count type) 4))]
+    [:span {:class "type-select" :key name}
+     [:input {:type "checkbox" :name part :id name :value name}]
+     [:label {:for name}
+      [:span {:class "tooltiptext"} (tr (keyword name))]
+      [:img {:src (str base-path type) :alt type}]]]))
 
-(defn update-value
-  "Dispatch an event to update the value at the given path in the selected species."
-  [path]
-  (fn [event]
-    (re-frame/dispatch
-     [:set-value [(concat [:selected] path)
-                  (-> event .-target .-value)]])))
-
-(defn get-in-species [& path]
-  (get-in @(re-frame/subscribe [::subs/selected-species]) path))
-
-(defn edit? [] @(re-frame/subscribe [::subs/edit?]))
-
-(defn option-elem [item] [:option {:value item :key item} (tr item)])
-(defn select-elem [props items]
-  [:select props
-   (->> items
-        (sort-by tr)
-        (map option-elem)
-        doall)])
-
-(defn value
-  ([path] (value {} path))
-  ([params path]
-   (let [val (apply get-in-species path)]
-     (if (edit?)
-       [:input (merge {:type "text"
-                       :value (or val "")
-                       :on-change (update-value path)}
-                      params)]
-       [:span params val]))))
-
-(defn species-list-item [{:keys [latin name] :as species}]
-  (let [selected (re-frame/subscribe [::subs/selected-species])]
-    [:li {:on-click (dispatch-key :selected-species species)
-          :key latin
-          :class ["species-item" (when (= latin @selected) "selected")]}
-     name]))
-
-(defn species-list
-  "Generate a side bar contining all species, that can be searched over."
-  []
-  (let [species (re-frame/subscribe [::subs/species])
-        species-selector (re-frame/subscribe [::subs/species-search])]
-    [:div {:id "species-list-container" :class "side-bar"}
-     [:input {:id "species-search" :type "text" :name "species-search"
-              :placeholder (tr :search-species)
-              :value (str @species-selector)
-              :on-change (dispatch-key :species-search)}]
-      [:ul {:id "species-list"} (doall (map species-list-item @species))]]))
-
-(defn clade [clade]
-  [:div {:class "clade" :key clade}
-   [:span {:class "clade-type"} (tr clade)]
-   [:span {:class "clade-name"} (value [:taxonomy clade])]])
-
-(defn taxonomy
-  "Return the taxonomy section."
-  []
-  [:div {:class "taxonomy"}
-   (doall (map clade taxonomy-types))])
-
-(defn symptom [part symptom]
-  [:div {:class "symptom"}
-   (value {:type "checkbox" :class "is-positive"} [:parts part :symptoms symptom :positive])
-   (value {:class "symptom-name" :placeholder (tr :symptom)} [:parts part :symptoms symptom :name])
-   (if (edit?)
-     (select-elem {:class "application" :placeholder (tr :sub-application)} application-methods)
-     (value {:class "application" :placeholder (tr :sub-application)} [:parts part :symptoms symptom :application]))
-   (value {:class "amount-needed" :placeholder (tr :amount-per-kg)} [:parts part :symptoms symptom :amount-per-kg])
-   (value {:class "t-start" :placeholder (tr :time-till-active)} [:parts part :symptoms symptom :time-till-active])
-   (value {:class "t-end" :placeholder (tr :duration)} [:parts part :symptoms symptom :duration])
-   (when (edit?)
-     [:span {:class "actions"}
-      [:button {:on-click (dispatch-key :dissoc-value [:selected :parts part :symptoms symptom])} "delete"]])
-   ])
-
-(defn add-symptom [part]
-  [:button {:class "add-symptom"
-            :on-click (stop-propagation (dispatch-key :add-symptom part))}
-   "+"])
-
-(defn part-symptoms [part]
-  (let [symptoms (get-in-species :parts part :symptoms)]
-    [:details {:class "symptoms"}
-     [:summary (tr :symptoms) (add-symptom part)]
-     (map (partial symptom part) (keys symptoms))]))
-
-(defn part-active-subs [part]
-  [:details {:class "active-subs"}
-   [:summary (tr :active-substances)]
-   [:textarea (get-in-species :parts part :active-substances)]])
-
-
-(defn plant-part [part]
-  [:details {:class "plant-part" :id part :key part}
+(defn part-types [base-path part types]
+  [:details {:class "part-types-container" :open true}
    [:summary (tr part)]
-   (part-symptoms part)
-   (part-active-subs part)
-   ])
-
-(defn details []
-  (vec (concat [:div {:id "species-container" :class "content"}]
-   (when-let [species @(re-frame/subscribe [::subs/selected-species])]
-     [[:div {:id "title"}
-       [value {:class "title"} [:name]]
-       [value {:class "title"} [:latin]]]
-      [:section {:id "general-info"}
-       (taxonomy)
-       [:div [:br][:br] "(tu by trza dać jakieś inne rzeczy, typu odnośniki do wikipedii itp.)"]]
-      [:section {:id "usages"}
-       (tr :usages)
-       (doall (map plant-part plant-parts))]
-      ]))))
+   (into [:div {:class "part-types"}]
+          (for [type types] (part-type-selector base-path part type)))])
 
 (defn main-panel []
   [:div {:class "container"}
-   (species-list)
-   (details)
+   [:form {:method "post" :class "edit-species"}
+    (text-input :latin-name)
+    (text-input :name)
+    (text-input :order)
+    (text-input :family)
+
+    [:details {:open true}
+     [:summary (tr :flowers)]
+     (part-types "img/inflorescence/" :inflorescence
+ [
+  "botryoid.svg" "raceme.svg" "spike.svg" "catkin.svg" "corymb_racemose.svg" "umbel.svg" "spadix.svg" "head.svg" "calathid.png" "compound_capitulum.svg"
+  "cyme_double_curled.svg" "cyme_double_straight.svg" "dreparium.svg" "cinicinnus.svg" "dichasium.svg"
+    "compound_heterothetic.svg"
+  "corymb_cymose.svg" "compound_umbel.svg"
+  "compound_homeothetic.svg" "compound_spike.svg"
+  "anthela.svg" "thyrse.svg" "compound_triple_umbel.svg"
+  "panicle.svg" "thyrsoid.svg"
+                                                      ])]
+
+    [:details {:open true}
+     [:summary (tr :leaves)]
+     (part-types "img/leaf/edge/" :leaf-edge
+                 ["entire.png", "ciliate.png", "denticulate.png", "spiny.png",
+                  "serrulate.png", "dentate.png", "serrate.png", "doubly_serrate.png",
+                  "crenate.png", "sinuate.png", "undulate.png", "lobate.png"])
+     (part-types "img/leaf/structure/" :leaf-structure
+                 ["simple.png" "bifoliolate.png" "bigeminate.png" "trifoliolate.png"
+                  "palmately_compound.png" "biternate.png" "imparipinnate.png" "paripinnate.png"
+                  "tripinnate.png" "bipinnate.png"])
+     (part-types "img/leaf/shape/" :leaf-shape
+                 ["falcate.png" "lanceolate.png" "linear.png" "oblanceolate.png"
+                  "hastate.png" "spear-shaped.png" "rhomboid.png" "trullate.png"
+                  "elliptic.png" "ovale.png" "orbicular.png" "reniform.png"
+                  "obcordate.png" "spatulate.png" "pandurate.png" "lyrate.png"
+                  "deltoid.png" "cordate.png" "flabelate.png" "obovate.png"
+                  "palmate.png" "digitate.png" "pedate.png"  "lobed.png"
+                  "multifide.png" "ensiforme.png" "filiform.png"  "acicular.png"
+                  "lorate.png" "oblong.png"])]
+    [:input {:type :submit :value (tr :save)}]
+    ]
+   @(re-frame/subscribe [::subs/name])
    ])

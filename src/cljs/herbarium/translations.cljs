@@ -7,30 +7,33 @@
   (-> value name str/capitalize (str/replace "-" " ")))
 
 (def dicts
-  {:en (->> [:search-species
+  {:en (->> [:save :latin-name :name
+             :search-species
              :kingdom :class :order :family :genus :species
-             :usages :whole-plant :leaves :stem :bark :root
-             :symptom :symptoms :active-substances
-             :raw :cooked :dried :infusion :poultice :oil
+             :usages :whole-plant :leaves :stem :bark :root :flowers
 
              ;; Inflorescence
-             :anthela :dichasium :spadix :botryoid :corymb-racemose
-             :dreparium :spike :catkin :compound-spike :head :thyrse
-             :cinicinnus :compound-triple-umbel :calathid :panicle :thyrsoid
+             :inflorescence
+             :anthela :dichasium :spadix :botryoid :corymb_racemose
+             :dreparium :spike :catkin :compound_spike :head :thyrse
+             :cinicinnus :compound_triple_umbel :calathid :panicle :thyrsoid
              :compound-umbel :raceme :umbel :pleiochasium
 
              ;; Leaf types
+             :leaf-structure
              :bifoliolate :bipinnate :imparipinnate :paripinnate :trifoliolate :bigeminate
-             :biternate :palmately-compound :simple :tripinnate
+             :biternate :palmately_compound :simple :tripinnate
 
              ;; Leaf shapes
-             :acicular :elliptic :flabelate :lobed :obcordate :orbicular :pedate :spear-shaped
+             :leaf-shape
+             :acicular :elliptic :flabelate :lobed :obcordate :orbicular :pedate :spear_shaped
              :cordate :ensiforme :hastate :lorate :oblanceolate :ovale :reniform :trullate
              :deltoid :falcate :lanceolate :lyrate :oblong :palmate :rhomboid :digitate :filiform
              :linear :multifide :obovate :pandurate :spatulate
 
              ;; Leaf edges
-             :ciliate :crenate :dentate :denticulate :doubly-serrate :entire
+             :leaf-edge
+             :ciliate :crenate :dentate :denticulate :doubly_serrate :entire
              :lobate :serrate :serrulate :sinuate :spiny :undulate
 
              ;; Fruit
@@ -40,12 +43,7 @@
             (map #(vector % (key->name %)))
             (into {})
             (merge
-             {:sub-application "Method of application"
-              :amount-per-kg "Grams per body kg"
-              :time-till-active "Minutes till active"
-              :duration "Duration in minutes"
-
-              :compound-heterothetic "Heterothetic compound raceme"
+             {:compound-heterothetic "Heterothetic compound raceme"
               :compound-homeothetic "Homeothetic compound raceme"
               :corymb-cymose "Cymose corymb"
               :cyme-double-curled "Double cyme"
@@ -54,7 +52,11 @@
               :cyme-umbelliform "Umbelliform cyme"
               }))
 
-   :pl {:search-species "Wyszukaj gatunek"
+   :pl {:save "zapisz"
+        :latin-name "Nazwa łacinska"
+        :name "Nazwa zwyczajowa"
+
+        :search-species "Wyszukaj gatunek"
         :kingdom "Królestwo"
         :class "Klasa"
         :order "Rząd"
@@ -65,56 +67,44 @@
         :usages "Zastosowania"
         :whole-plant "Cała roślina"
         :leaves "Liście"
+        :flowers "Kwiaty"
         :stem "Łodyga"
         :bark "Kora"
         :root "Korzenie"
 
-        :symptom "Objaw"
-        :symptoms "Objawy"
-        :sub-application "Sposób stosowania"
-        :amount-per-kg "Gramy na kg masy ciała"
-        :time-till-active "Minut do aktywacji"
-        :duration "Czas trwania w minutach"
-        :active-substances "Substancje czynne"
-
-        :raw "Surowo"
-        :cooked "Ugotowano"
-        :dried "Wysuszono"
-        :infusion "Wywar"
-        :poultice "Kompres"
-        :oil "Olej"
-
         ;; Inflorescence
+        :inflorescence "Kwiatostan"
         :anthela "anthela"
-        :compound-heterothetic "Heterothetic compound raceme"
-        :compound-homeothetic "Homeothetic compound raceme"
-        :corymb-cymose "Cymose corymb"
-        :cyme-double-curled "Double cyme"
-        :cyme-double-straight "Double cyme"
+        :compound_heterothetic "Heterothetic compound raceme"
+        :compound_homeothetic "Homeothetic compound raceme"
+        :corymb_cymose "Cymose corymb"
+        :cyme_double_curled "Double cyme"
+        :cyme_double_straight "Double cyme"
         :thyrse "Thyrse"
         :thyrsoid "Thyrsoid"
-        :compound-capitulum "Compound capitulum"
-        :cyme-umbelliform "Umbelliform cyme"
+        :compound_capitulum "Compound capitulum"
+        :cyme_umbelliform "Umbelliform cyme"
 
         :dichasium "wierzchotka dwuramienna"
         :pleiochasium "wierzchotka wieloramienna"
         :spadix "kolba"
         :botryoid "grono skończone (?)"
-        :corymb-racemose "baldachogrono"
+        :corymb_racemose "baldachogrono"
         :dreparium "sierpik"
         :spike "kłos"
         :catkin "kotka"
-        :compound-spike "kłos złożony"
+        :compound_spike "kłos złożony"
         :head "główka"
         :calathid "koszyczek"
         :cinicinnus "wachlarzyk"
-        :compound-triple-umbel "baldach złożony (potrójnie)"
+        :compound_triple_umbel "baldach złożony (potrójnie)"
         :panicle "wiecha"
-        :compound-umbel "baldach złożony"
+        :compound_umbel "baldach złożony"
         :raceme "grono"
         :umbel "baldach"
 
         ;; leaf types
+        :leaf-structure "Kształ blaszki"
         :bifoliolate "dwulistkowy"
         :bipinnate "podwójnie pierzasty"
         :imparipinnate "nieparzystopierzasty"
@@ -122,11 +112,12 @@
         :trifoliolate "trójlistkowy"
         :bigeminate "podwójnie dwulistkowy"
         :biternate "potrójnie trójlistkowy"
-        :palmately-compound "dłoniasto złożony"
+        :palmately_compound "dłoniasto złożony"
         :simple "prosty"
         :tripinnate "potrójnie pierzasty"
 
         ;; Leaf shapes
+        :leaf-shape "Kształt blaski liściowej"
         :acicular "szpilkowy"
         :elliptic "eliptyczny"
         :flabelate "łopatkowaty"
@@ -134,7 +125,7 @@
         :obcordate "odwrotnie sercowaty"
         :orbicular "okrągły"
         :pedate "pierzastowrębny"
-        :spear-shaped "strzałkowaty"
+        :spear_shaped "strzałkowaty"
         :cordate "sercowaty"
         :ensiforme "igiełkowaty"
         :hastate "oszczepowaty"
@@ -159,11 +150,12 @@
         :spatulate "łopatkowaty"
 
         ;; Leaf edges
+        :leaf-edge "Brzeg blaszki"
         :ciliate "ciliate"
         :crenate "karbowany"
         :dentate "ząbkowany"
         :denticulate "ząbkowany"
-        :doubly-serrate "podwójnie piłkowany"
+        :doubly_serrate "podwójnie piłkowany"
         :entire "całobrzegi"
         :lobate "falisto wcięty"
         :serrate "piłkowany"
@@ -174,18 +166,18 @@
 
         ;; Fruit
         :achene "niełupka"
-        :capsule "Torebka"
-        :caryopsis "Ziarniak"
+        :capsule "torebka"
+        :caryopsis "ziarniak"
         :drupe "pestkowiec"
-        :follicle "Mieszek"
+        :follicle "mieszek"
         :legume "strąk"
         :nut "orzech"
         :samara "skrzydlak"
-        :silique "Łuszczynka"
-        :siliqua "Łuszczyna"
+        :silique "łuszczynka"
+        :siliqua "łuszczyna"
         :berry "jagoda"
-        :achaenium "Niełupka"
-        :schizocarp "Rozłupnia"
+        :achaenium "niełupka"
+        :schizocarp "rozłupnia"
         }
 
    :tongue/fallback :pl})
