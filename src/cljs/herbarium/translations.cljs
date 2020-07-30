@@ -10,10 +10,16 @@
   {:en (->> [:save :latin-name :name
              :search-species
              :kingdom :class :order :family :genus :species
-             :usages :whole-plant :leaves :stem :bark :root :flowers
+             :usages :whole-plant :leaves :stem :bark :root :flowers :fruit
+
+             :life-form
+             :phanerophyte :epiphyte :chamaephyte :hemicryptophyte :geophyte
+             :helophyte :hydrophyte :therophyte :aerophyte
+
+             :life-span :summer-annual :winter-annual :biennial :perennial
 
              ;; Inflorescence
-             :inflorescence
+             :inflorescence :floral-formula :blooms
              :anthela :dichasium :spadix :botryoid :corymb_racemose
              :dreparium :spike :catkin :compound_spike :head :thyrse
              :cinicinnus :compound_triple_umbel :calathid :panicle :thyrsoid
@@ -38,7 +44,7 @@
 
              ;; Fruit
              :achene :capsule :caryopsis :drupe :follicle :legume :nut
-             :samara :silique :siliqua :berry :achaenium :schizocarp
+             :samara :silique :siliqua :berry :schizocarp
              ]
             (map #(vector % (key->name %)))
             (into {})
@@ -71,8 +77,30 @@
         :stem "Łodyga"
         :bark "Kora"
         :root "Korzenie"
+        :fruit "Owoc"
+
+        ;; life forms
+        :life-form "Forma życiowa"
+        :phanerophyte "Fanerofit"
+        :epiphyte "Epifit"
+        :chamaephyte "Chamefit"
+        :hemicryptophyte "Hemikryptofit"
+        :geophyte "Geofit"
+        :helophyte "Helofit"
+        :hydrophyte "Hydrofit"
+        :therophyte "terofit"
+        :aerophyte "aerofit"
+
+        ;; life span
+        :life-span "Czas życia"
+        :summer-annual "Jara"
+        :winter-annual "Ozima"
+        :biennial "Dwuletnia"
+        :perennial "Bylina"
 
         ;; Inflorescence
+        :floral-formula "Wzór kwiatowy"
+        :blooms "Kwitnie"
         :inflorescence "Kwiatostan"
         :anthela "anthela"
         :compound_heterothetic "Heterothetic compound raceme"
@@ -176,7 +204,6 @@
         :silique "łuszczynka"
         :siliqua "łuszczyna"
         :berry "jagoda"
-        :achaenium "niełupka"
         :schizocarp "rozłupnia"
         }
 
