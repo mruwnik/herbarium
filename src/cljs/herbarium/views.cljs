@@ -32,6 +32,12 @@
    (into [:div {:class "multi-checkbox"}]
          (for [[value display] items] (fancy-checkbox name value display))))
 
+(defn list-multi-checkbox
+  ([name coll] (list-multi-checkbox name coll tr))
+  ([name coll formatter]
+   [:div {:class name}
+    [:label {:for name} (tr name)]
+    (multi-checkbox name (into {} (for [i coll] [i (formatter i)])))]))
 
 ;; Generates a group of selectable images
 (defn part-type-selector [base-path part type]
@@ -47,6 +53,20 @@
    [:div {:class "part-types"}
     (multi-checkbox part (into {} (map (partial part-type-selector base-path part) types)))]])
 
+(defn soil []
+  [:details {:open true}
+   [:summary (tr :soil)]
+   [:div
+    (list-multi-checkbox :soil-type [:loess :peat :silt :clay :sandy :chalk :stony])
+    (list-multi-checkbox :soil-ph [:very-acidic :acidic :slightly-acidic :neutral :alkaline])
+    (list-multi-checkbox :soil-moisture [:dry :wet :water-logged :submerged])
+
+    (into
+     [:div {:class :macronutrient-requirements}
+      [:label {:for :macronutrient-requirements} (tr :macronutrient-requirements)]]
+     (for [element [:nitrogen :potasium :phosphorous :calcium :magnesium :sulfur]]
+       (radio-input element [:low :high])))
+    ]])
 
 (defn life-forms []
   [:div
@@ -54,6 +74,62 @@
                 [:phanerophyte :epiphyte :chamaephyte :hemicryptophyte :geophyte
                  :helophyte :hydrophyte :therophyte :aerophyte])
    (radio-input :life-span [:summer-annual :winter-annual :biennial :perennial])])
+
+(defn ecology []
+  [:details {:open true}
+   [:summary (tr :ecology)]
+   (radio-input :light-requirements [:heliophyte :sciophyte :facultative-sciophytes :facultative-heliophytes])
+   (text-input :height)
+   (life-forms)
+   (radio-input :stem-type [:herbaceous :woody])
+   (list-multi-checkbox :growth-pattern [:vertical :bushy :cover :vine])
+   (list-multi-checkbox :vegetive-reproduction [:side-growth :clonal :stolon :rhizome])])
+
+(defn flowers []
+  [:details {:open true}
+   [:summary (tr :flowers)]
+   (text-input :floral-formula)
+
+   (list-multi-checkbox :blooms (range 1 13) str)
+
+   (part-types "img/flower/inflorescence/" :inflorescence
+               ["botryoid.svg" "raceme.svg" "spike.svg" "catkin.svg" "corymb_racemose.svg"
+                "umbel.svg" "spadix.svg" "head.svg" "calathid.png" "compound_capitulum.svg"
+                "cyme_double_curled.svg" "cyme_double_straight.svg" "dreparium.svg"
+                "cinicinnus.svg" "dichasium.svg" "compound_heterothetic.svg" "corymb_cymose.svg"
+                "compound_umbel.svg" "compound_homeothetic.svg" "compound_spike.svg"
+                "anthela.svg" "thyrse.svg" "compound_triple_umbel.svg" "panicle.svg" "thyrsoid.svg"])
+   (part-types "img/flower/shapes/" :flower-symmetry ["actinomorphic.png"  "zygomorphic.png"])
+   (part-types "img/flower/shapes/" :flower-shape
+               ["coronate.png" "cyanthiform.png" "ligulate.png" "saccate.png" "tubulate.png"
+                "calceolate.png" "crateriform.png" "funnelform.png" "papilionaceous.png"
+                "salverform.png" "urceolate.png" "campanulate.png" "cruciform.png"
+                "galeate.png" "rotate.png" "stellate.png"])
+
+   (radio-input :fruit
+                [:achene :capsule :caryopsis :drupe :follicle :legume :nut
+                 :samara :silique :siliqua :berry :schizocarp])])
+
+(defn leaves []
+  [:details {:open true}
+   [:summary (tr :leaves)]
+   (part-types "img/leaf/edge/" :leaf-edge
+               ["entire.png", "ciliate.png", "denticulate.png", "spiny.png",
+                "serrulate.png", "dentate.png", "serrate.png", "doubly_serrate.png",
+                "crenate.png", "sinuate.png", "undulate.png", "lobate.png"])
+   (part-types "img/leaf/structure/" :leaf-structure
+               ["simple.png" "bifoliolate.png" "bigeminate.png" "trifoliolate.png"
+                "palmately_compound.png" "biternate.png" "imparipinnate.png" "paripinnate.png"
+                "tripinnate.png" "bipinnate.png"])
+   (part-types "img/leaf/shape/" :leaf-shape
+               ["falcate.png" "lanceolate.png" "linear.png" "oblanceolate.png"
+                "hastate.png" "spear-shaped.png" "rhomboid.png" "trullate.png"
+                "elliptic.png" "ovale.png" "orbicular.png" "reniform.png"
+                "obcordate.png" "spatulate.png" "pandurate.png" "lyrate.png"
+                "deltoid.png" "cordate.png" "flabelate.png" "obovate.png"
+                "palmate.png" "digitate.png" "pedate.png"  "lobed.png"
+                "multifide.png" "ensiforme.png" "filiform.png"  "acicular.png"
+                "lorate.png" "oblong.png"])])
 
 (defn main-panel []
   [:div {:class "container"}
@@ -63,47 +139,9 @@
     (text-input :order)
     (text-input :family)
 
-    (life-forms)
+    (ecology)
+    (soil)
+    (flowers)
+    (leaves)
 
-    [:details {:open true}
-     [:summary (tr :flowers)]
-     (text-input :floral-formula)
-
-     [:div {:class "bloom-times"}
-      [:label {:for :blooms} (tr :blooms)]
-      (multi-checkbox :blooms (into {} (for [i (range 1 13)] [i i])))]
-
-     (part-types "img/inflorescence/" :inflorescence
-                 ["botryoid.svg" "raceme.svg" "spike.svg" "catkin.svg" "corymb_racemose.svg"
-                  "umbel.svg" "spadix.svg" "head.svg" "calathid.png" "compound_capitulum.svg"
-                  "cyme_double_curled.svg" "cyme_double_straight.svg" "dreparium.svg"
-                  "cinicinnus.svg" "dichasium.svg" "compound_heterothetic.svg" "corymb_cymose.svg"
-                  "compound_umbel.svg" "compound_homeothetic.svg" "compound_spike.svg"
-                  "anthela.svg" "thyrse.svg" "compound_triple_umbel.svg" "panicle.svg" "thyrsoid.svg"])
-     (radio-input :fruit
-                  [:achene :capsule :caryopsis :drupe :follicle :legume :nut
-                   :samara :silique :siliqua :berry :schizocarp])]
-
-    [:details {:open true}
-     [:summary (tr :leaves)]
-     (part-types "img/leaf/edge/" :leaf-edge
-                 ["entire.png", "ciliate.png", "denticulate.png", "spiny.png",
-                  "serrulate.png", "dentate.png", "serrate.png", "doubly_serrate.png",
-                  "crenate.png", "sinuate.png", "undulate.png", "lobate.png"])
-     (part-types "img/leaf/structure/" :leaf-structure
-                 ["simple.png" "bifoliolate.png" "bigeminate.png" "trifoliolate.png"
-                  "palmately_compound.png" "biternate.png" "imparipinnate.png" "paripinnate.png"
-                  "tripinnate.png" "bipinnate.png"])
-     (part-types "img/leaf/shape/" :leaf-shape
-                 ["falcate.png" "lanceolate.png" "linear.png" "oblanceolate.png"
-                  "hastate.png" "spear-shaped.png" "rhomboid.png" "trullate.png"
-                  "elliptic.png" "ovale.png" "orbicular.png" "reniform.png"
-                  "obcordate.png" "spatulate.png" "pandurate.png" "lyrate.png"
-                  "deltoid.png" "cordate.png" "flabelate.png" "obovate.png"
-                  "palmate.png" "digitate.png" "pedate.png"  "lobed.png"
-                  "multifide.png" "ensiforme.png" "filiform.png"  "acicular.png"
-                  "lorate.png" "oblong.png"])]
-    [:input {:type :submit :value (tr :save)}]
-    ]
-   @(re-frame/subscribe [::subs/name])
-   ])
+    [:input {:type :submit :value (tr :save)}]]])

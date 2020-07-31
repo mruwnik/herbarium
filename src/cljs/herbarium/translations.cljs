@@ -12,11 +12,25 @@
              :kingdom :class :order :family :genus :species
              :usages :whole-plant :leaves :stem :bark :root :flowers :fruit
 
+             :ecology :height
              :life-form
              :phanerophyte :epiphyte :chamaephyte :hemicryptophyte :geophyte
              :helophyte :hydrophyte :therophyte :aerophyte
 
              :life-span :summer-annual :winter-annual :biennial :perennial
+
+             ;; Environment
+             :light-requirements :heliophyte :sciophyte :facultative-sciophytes :facultative-heliophytes
+             :stem-type :herbaceous :woody
+             :growth-pattern :vertical :bushy :cover :vine
+             :vegetive-reproduction :side-growth :clonal :stolon :rhizome
+
+             ;; Soil
+             :soil :high :low
+             :soil-type :loess :peat :silt :clay :sandy :chalk :stony
+             :soil-ph :very-acidic :acidic :slightly-acidic :neutral :alkaline
+             :soil-moisture :dry :wet :water-logged :submerged
+             :macronutrient-requirements :nitrogen :potasium :phosphorous :calcium :magnesium :sulfur
 
              ;; Inflorescence
              :inflorescence :floral-formula :blooms
@@ -24,6 +38,12 @@
              :dreparium :spike :catkin :compound_spike :head :thyrse
              :cinicinnus :compound_triple_umbel :calathid :panicle :thyrsoid
              :compound-umbel :raceme :umbel :pleiochasium
+
+             ;; Flower shape
+             :flower-symmetry :flower-shape
+             :actinomorphic :calceolate :campanulate :coronate :crateriform :cruciform
+             :cyanthiform :funnelform :galeate :ligulate :papilionaceous :rotate :saccate
+             :salverform :stellate :tubulate :urceolate :zygomorphi
 
              ;; Leaf types
              :leaf-structure
@@ -78,6 +98,63 @@
         :bark "Kora"
         :root "Korzenie"
         :fruit "Owoc"
+        :ecology "Ekologia"
+        :height "Wysokość"
+
+        ;; Environment
+        :light-requirements "Wymagania świetlne"
+        :heliophyte "Heliofit"
+        :sciophyte "Skiofit"
+        :facultative-heliophytes "Heliofit facultatywny"
+        :facultative-sciophytes "Skiofit facultatywny"
+
+        :stem-type "Typ łodygi"
+        :herbaceous "Zielna"
+        :woody "Drzewiasta"
+
+        :vegetive-reproduction "Rozmnażanie wegetatywne"
+        :growth-pattern "Sposób wrzostu"
+        :vertical "Pionowy"
+        :bushy "Krzaczasty"
+        :cover "Płożący"
+        :side-growth "Gałęże boczne"
+        :clonal "Klonalny"
+        :stolon "Stolony"
+        :rhizome "Kłącze"
+        :vine "Pnącze"
+
+        ;; Soil
+        :soil "Gleba"
+        :soil-type "Rodzaj gleby"
+        :loess "lessowa"
+        :peat "torfowa"
+        :silt "ilasta"
+        :chalk "wapienna"
+        :clay "gliniasta"
+        :stony "kamienista"
+        :sandy "piaszczysta"
+
+        :soil-ph "pH gleby"
+        :very-acidic "bardzo kwaśne"    ; < 4.5
+        :acidic "kwaśne"                ; 4.6 - 5.5
+        :slightly-acidic "lekko kwaśne" ; 5.6 - 6.5
+        :neutral "obojętne"             ; 6.6 - 7.2
+        :alkaline "zasadowe"            ; > 7.3
+
+        :high "wysokie" :low "niskie"
+        :macronutrient-requirements "Wymagane makroelementy"
+        :nitrogen "azot"
+        :potasium "potas"
+        :phosphorous "fosfor"
+        :calcium "wapń"
+        :magnesium "magnez"
+        :sulfur "siarka"
+
+        :soil-moisture "Wilgotność gleby"
+        :dry "sucha"
+        :wet "wilgotna"
+        :water-logged "podmokła"
+        :submerged "podwodna"
 
         ;; life forms
         :life-form "Forma życiowa"
@@ -97,6 +174,30 @@
         :winter-annual "Ozima"
         :biennial "Dwuletnia"
         :perennial "Bylina"
+
+        ;; Flower
+        :flower-symmetry "Symetria"
+        :flower-shape "Kształt okwiatu"
+        :tubulate "trąbkowate"
+        :campanulate "dzwonkowate"
+        :funnelform "lejkowate"
+        :ligulate "wargowate"
+        :papilionaceous "motylkowate"
+
+        ;;;;;; Unknown
+        :actinomorphic "actinomorphic"
+        :calceolate "calceolate"
+        :coronate "coronate"
+        :crateriform "crateriform"
+        :cruciform "cruciform"
+        :cyanthiform "cyanthiform"
+        :galeate "galeate"
+        :rotate "rotate"
+        :saccate "saccate"
+        :salverform "salverform"
+        :stellate "stellate"
+        :urceolate "urceolate"
+        :zygomorphic "zygomorphic"
 
         ;; Inflorescence
         :floral-formula "Wzór kwiatowy"
