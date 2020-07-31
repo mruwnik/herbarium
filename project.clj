@@ -13,6 +13,7 @@
                  [tongue "0.2.8"]
                  [ring "1.7.1"]]
 
+  :main ^:skip-aot herbarium.server
   :plugins [[lein-garden "0.3.0"]
             [lein-shell "0.5.0"]]
 

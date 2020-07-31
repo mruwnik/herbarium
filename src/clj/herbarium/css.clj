@@ -15,6 +15,12 @@
 
    [:.list-multi-checkbox {:margin "20px 0px"}]
 
+   [:.colour-picker
+    [:.input-label {:position :relative :top "-40px"}]
+    [:input {:display :none}]
+    [:.flower-cutout {:width "65px" :height "65px" :margin "5px"}]
+    ["input[type=radio]:checked + label img" {:box-shadow "0 0 5px 1px rgba(0,0,200.6)"}]]
+
    [:.multi-checkbox
     [:.type-select
      [:.fancy-checkbox-contents

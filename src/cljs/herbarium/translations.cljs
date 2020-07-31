@@ -39,6 +39,7 @@
              :cinicinnus :compound_triple_umbel :calathid :panicle :thyrsoid
              :compound-umbel :raceme :umbel :pleiochasium
 
+             :flower-colour :red :yellow :blue :white :green :orange :purple
              ;; Flower shape
              :flower-symmetry :flower-shape
              :actinomorphic :calceolate :campanulate :coronate :crateriform :cruciform
@@ -165,8 +166,8 @@
         :geophyte "Geofit"
         :helophyte "Helofit"
         :hydrophyte "Hydrofit"
-        :therophyte "terofit"
-        :aerophyte "aerofit"
+        :therophyte "Terofit"
+        :aerophyte "Aerofit"
 
         ;; life span
         :life-span "Czas życia"
@@ -176,6 +177,15 @@
         :perennial "Bylina"
 
         ;; Flower
+        :flower-colour "Kolor okwiatu"
+        :red "Czerwony"
+        :yellow "Żółty"
+        :blue "Niebieski"
+        :white "Biały"
+        :green "Zielony"
+        :orange "Pomarańczowy"
+        :purple "Fioletowy"
+
         :flower-symmetry "Symetria"
         :flower-shape "Kształt okwiatu"
         :tubulate "trąbkowate"

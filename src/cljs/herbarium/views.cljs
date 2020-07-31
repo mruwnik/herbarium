@@ -22,13 +22,15 @@
     [:label {:for name :class :input-label} label]
     [:input {:name name :id name :type "text"}]]))
 
-(defn radio-input [name values]
-  (into [:div {:class "radio-buttons"}
-         [:label {:class :input-label} (tr name)]]
-        (for [type values]
-          [:span
-           [:input {:type "radio" :name name :id type :value type}]
-           [:label {:for type} (tr type)]])))
+(defn radio-input
+  ([name values] (radio-input name values tr))
+  ([name values formatter]
+   (into [:div {:class "radio-buttons"}
+          [:label {:class :input-label} (tr name)]]
+         (for [type values]
+           [:span
+            [:input {:type "radio" :name name :id type :value type}]
+            [:label {:for type} (formatter type)]]))))
 
 (defn fancy-checkbox [name value display]
   [:span {:class "type-select" :key value}
@@ -97,6 +99,14 @@
                  [:achene :capsule :caryopsis :drupe :follicle :legume :nut
                   :samara :silique :siliqua :berry :schizocarp])
 
+    [:div {:class :colour-picker}
+     (radio-input
+      :flower-colour
+      [:red :yellow :blue :white :green :orange :purple]
+      (fn [type]
+        [:img {:src "img/flower/flower-cutout.png" :alt (tr type)
+               :class :flower-cutout :style {:background type}}]))]
+
     (part-types "img/flower/inflorescence/" :inflorescence
                 ["botryoid.svg" "raceme.svg" "spike.svg" "catkin.svg" "corymb_racemose.svg"
                  "umbel.svg" "spadix.svg" "head.svg" "calathid.png" "compound_capitulum.svg"
@@ -135,7 +145,9 @@
 
 (defn main-panel []
   [:div {:class "container"}
-   [:form {:method "post" :class "edit-species"}
+   [:form {:method "post"
+           :class "edit-species"
+           :action (str @(re-frame/subscribe [::subs/backend-url]) "add")}
     (text-input :latin-name)
     (text-input :name)
     (text-input :order)
