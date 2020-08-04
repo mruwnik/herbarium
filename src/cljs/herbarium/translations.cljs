@@ -21,7 +21,7 @@
 
              ;; Environment
              :light-requirements :heliophyte :sciophyte :facultative-sciophytes :facultative-heliophytes
-             :stem-type :herbaceous :woody
+             :stem-type :herbaceous :woody :thorns :prickles
              :growth-pattern :vertical :bushy :cover :vine
              :vegetive-reproduction :side-growth :clonal :stolon :rhizome
 
@@ -29,7 +29,7 @@
              :soil :high :low
              :soil-type :loess :peat :silt :clay :sandy :chalk :stony
              :soil-ph :very-acidic :acidic :slightly-acidic :neutral :alkaline
-             :soil-moisture :dry :wet :water-logged :submerged
+             :soil-moisture :arid :dry :wet :water-logged :submerged
              :macronutrient-requirements :nitrogen :potasium :phosphorous :calcium :magnesium :sulfur
 
              ;; Inflorescence
@@ -45,6 +45,10 @@
              :actinomorphic :calceolate :campanulate :coronate :crateriform :cruciform
              :cyanthiform :funnelform :galeate :ligulate :papilionaceous :rotate :saccate
              :salverform :stellate :tubulate :urceolate :zygomorphi
+
+             ;; Leaf additions
+             :leaf-base :petiolate :clasping :peltate :perfoliate :petiolate :sessile
+             :phyllotaxis :alternate :opposite :rows :whorled
 
              ;; Leaf types
              :leaf-structure
@@ -77,6 +81,7 @@
               :cyme-double-straight "Double cyme"
               :compound-capitulum "Compound capitulum"
               :cyme-umbelliform "Umbelliform cyme"
+              :leaf-bottom-different "Leaf bottom a different colour than top?"
               }))
 
    :pl {:save "zapisz"
@@ -112,6 +117,9 @@
         :stem-type "Typ łodygi"
         :herbaceous "Zielna"
         :woody "Drzewiasta"
+
+        :thorns "Ciernie"
+        :prickles "Kolce"
 
         :vegetive-reproduction "Rozmnażanie wegetatywne"
         :growth-pattern "Sposób wrzostu"
@@ -152,6 +160,7 @@
         :sulfur "siarka"
 
         :soil-moisture "Wilgotność gleby"
+        :arid "bardzo sucha"
         :dry "sucha"
         :wet "wilgotna"
         :water-logged "podmokła"
@@ -241,6 +250,22 @@
         :compound_umbel "baldach złożony"
         :raceme "grono"
         :umbel "baldach"
+
+        ;;leaf
+        :stipule "Przylistki"
+        :peltate "peltate?"
+        :leaf-bottom-different "Spód liści innego koloru niż góra?"
+
+        :leaf-base "Nasada liścia"
+        :clasping "Obejmujący łodygę"
+        :perfoliate "Z pochwą liściową"
+        :petiolate "Ogonkowy"
+        :sessile "Siedzący"
+        :phyllotaxis "Filotaksja"
+        :alternate "Skrętoległa"
+        :opposite "Nakrzyżległa"
+        :rows "Naprzeciwległa"
+        :whorled "Okółkowa"
 
         ;; leaf types
         :leaf-structure "Kształ blaszki"

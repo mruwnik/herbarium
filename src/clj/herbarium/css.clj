@@ -15,12 +15,6 @@
 
    [:.list-multi-checkbox {:margin "20px 0px"}]
 
-   [:.colour-picker
-    [:.input-label {:position :relative :top "-40px"}]
-    [:input {:display :none}]
-    [:.flower-cutout {:width "65px" :height "65px" :margin "5px"}]
-    ["input[type=radio]:checked + label img" {:box-shadow "0 0 5px 1px rgba(0,0,200.6)"}]]
-
    [:.multi-checkbox
     [:.type-select
      [:.fancy-checkbox-contents
@@ -52,5 +46,16 @@
        :padding "10px"
        :background-color "black"
        :color "white"}]
-     ["label:hover .tooltiptext" {:display "inherit"}]]]]
+     ["label:hover .tooltiptext" {:display "inherit"}]]]
+
+   [:.colour-picker
+    {:width "700px"}
+    [:.input-label {:position :relative :top "-40px"}]
+    [:.type-select
+     ["label .fancy-checkbox-contents"
+      {:background :none :width "60px" :height "60px"}
+      [:img {:object-fit :cover}]]
+     ["input[type=checkbox] + label .fancy-checkbox-contents" {:border :none}]
+     ]]
+   ]
 )

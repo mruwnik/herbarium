@@ -8,4 +8,7 @@
    (let [port (Integer/parseInt (or (env :port) "3000"))]
      (run-jetty handler {:port port :join? false})))
 
-(when nil (def server (-main)))
+(comment
+  (def server (-main))
+  (.stop server)
+  )

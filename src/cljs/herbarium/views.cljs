@@ -32,10 +32,12 @@
             [:input {:type "radio" :name name :id type :value type}]
             [:label {:for type} (formatter type)]]))))
 
-(defn fancy-checkbox [name value display]
-  [:span {:class "type-select" :key value}
-   [:input {:type "checkbox" :name name :id value :value value}]
-   [:label {:for value} [:span {:class "fancy-checkbox-contents"} display]]])
+(defn fancy-checkbox
+  ([name value] (fancy-checkbox name value (tr name)))
+  ([name value display]
+   [:span {:class "type-select" :key value}
+    [:input {:type "checkbox" :name name :id value :value value}]
+    [:label {:for value} [:span {:class "fancy-checkbox-contents"} display]]]))
 
 (defn multi-checkbox [name items]
    (into [:span {:class "multi-checkbox"}]
@@ -67,7 +69,7 @@
    [:div
     (list-multi-checkbox :soil-type [:loess :peat :silt :clay :sandy :chalk :stony])
     (list-multi-checkbox :soil-ph [:very-acidic :acidic :slightly-acidic :neutral :alkaline])
-    (list-multi-checkbox :soil-moisture [:dry :wet :water-logged :submerged])
+    (list-multi-checkbox :soil-moisture [:arid :dry :wet :water-logged :submerged])
 
     (into
      [:div {:class :macronutrient-requirements}
@@ -80,6 +82,8 @@
   (section :ecology
    [:span
     (text-input :height)
+    (fancy-checkbox :thorns :thorns)
+    (fancy-checkbox :prickles :prickles)
     (radio-input :light-requirements [:heliophyte :sciophyte :facultative-sciophytes :facultative-heliophytes])
     (radio-input :life-form
                  [:phanerophyte :epiphyte :chamaephyte :hemicryptophyte :geophyte
@@ -99,10 +103,10 @@
                  [:achene :capsule :caryopsis :drupe :follicle :legume :nut
                   :samara :silique :siliqua :berry :schizocarp])
 
-    [:div {:class :colour-picker}
-     (radio-input
+    [:div {:class [:colour-picker :part-types]}
+     (list-multi-checkbox
       :flower-colour
-      [:red :yellow :blue :white :green :orange :purple]
+      [:red :yellow :blue :white :green :orange :purple :pink]
       (fn [type]
         [:img {:src "img/flower/flower-cutout.png" :alt (tr type)
                :class :flower-cutout :style {:background type}}]))]
@@ -125,6 +129,11 @@
 (defn leaves []
   (section :leaves
     [:div
+     (fancy-checkbox :stipule :stipule)
+     (fancy-checkbox :leaf-bottom-different :leaf-bottom-different)
+     (part-types "img/leaf/petiole/" :leaf-base
+                 ["clasping.png" "peltate.png" "perfoliate.png" "petiolate.png" "sessile.png"])
+     (part-types "img/leaf/phyllotaxis/" :phyllotaxis ["alternate.png" "opposite.png" "rows.png" "whorled.png"])
      (part-types "img/leaf/edge/" :leaf-edge
                  ["entire.png", "ciliate.png", "denticulate.png", "spiny.png",
                   "serrulate.png", "dentate.png", "serrate.png", "doubly_serrate.png",
